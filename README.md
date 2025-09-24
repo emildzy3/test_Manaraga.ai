@@ -1,11 +1,36 @@
-# Тестовое задаения для компании Manaraga.ai 
+# Тестовое задание для компании Manaraga.ai
+
+## Описание проекта
+
+### Технологический стек:
+- **Backend**: FastAPI (Python 3.13)
+- **Frontend**: Jinja2 templates + HTML/CSS
+- **LLM**: Perplexity AI API
+- **API данных**: FlightAPI.io
+- **Контейнеризация**: Docker + Docker Compose
+- **Веб-сервер**: NGINX (в production)
 
 ## Запуск проекта для разработки: 
 1. Создать файл .env по подобию ".env.example"
 2. `docker-compose -f docker-compose.dev.yml up`
 
-## Деплой на продакшен (TODO)
-`docker-compose -f docker-compose.prod.yml up`
+## Деплой на продакшен
+
+### Подготовка к деплою
+1. Создать файл `.env` с production настройками:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. В `.env` установить:
+   - `DEBUG=false`
+   - Реальные API ключи для FlightAPI.io и Perplexity
+   - При необходимости изменить `HOST` и `PORT`
+
+### Запуск production версии
+```bash
+docker-compose -f docker-compose.prod.yml up
+```
 
 ## Оригинальное ТЗ: 
 Project - Flights by Country
