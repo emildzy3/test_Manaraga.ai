@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-container {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+            display: none;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .result-text {
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .examples {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f4fd;
+            border-radius: 10px;
+        }
+
+        .examples h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .example-question {
+            background: white;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .example-question:hover {
+            background: #f0f8ff;
+            border-color: #4facfe;
+            transform: translateX(5px);
+        }
+
+        .info-panel {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-panel h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .info-panel p {
+            color: #664d03;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ {{ app_name }}</h1>
+            <p>Анализ данных о рейсах по странам отправления</p>
+        </div>
+
+        <div class="main-content">
+            <div class="info-panel">
+                <h4>ℹ️ Информация</h4>
+                <p>Выберите аэропорт и задайте вопрос о рейсах, прилетающих в него.
+                    Например: "Сколько рейсов прилетело из Германии?" или "Какие авиакомпании чаще всего летают сюда?"
+                </p>
+            </div>
+
+            <form id="flightForm">
+                <div class="form-group">
+                    <label for="airport_code">Выберите аэропорт:</label>
+                    <select id="airport_code" name="airport_code" required>
+                        <option value="">-- Выберите аэропорт --</option>
+                        {% for airport in airports %}
+                        <option value="{{ airport.code }}">
+                            {{ airport.code }} - {{ airport.name }} ({{ airport.city }}, {{ airport.country }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="question">Ваш вопрос о рейсах:</label>
+                    <textarea id="question" name="question"
+                        placeholder="Например: Сколько рейсов прилетело из Германии?" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Анализировать данные
+                </button>
+            </form>
+
+            <div id="examples" class="examples" style="display: none;">
+                <h3>📝 Примеры вопросов для выбранного аэропорта:</h3>
+                <div id="examplesList"></div>
+            </div>
+
+            <div id="result" class="result-container">
+                <div class="result-header">Результат анализа:</div>
+                <div class="result-text" id="resultText"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('flightForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultContainer = document.getElementById('result');
+        const resultText = document.getElementById('resultText');
+        const airportSelect = document.getElementById('airport_code');
+        const questionInput = document.getElementById('question');
+        const examplesContainer = document.getElementById('examples');
+        const examplesList = document.getElementById('examplesList');
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            // Показываем индикатор загрузки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Анализируем...';
+
+            resultContainer.classList.add('show');
+            resultText.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Получаем данные о рейсах и анализируем...</div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    resultText.innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <strong>🎯 Аэропорт:</strong> ${data.airport_code}<br>
+                            <strong>📊 Проанализировано рейсов:</strong> ${data.flights_count}
+                        </div>
+                        <div>${data.answer}</div>
+                    `;
+                } else {
+                    resultText.innerHTML = `
+                        <div style="color: #dc3545;">
+                            <strong>❌ Ошибка:</strong><br>
+                            ${data.detail || data.answer || 'Произошла неизвестная ошибка'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultText.innerHTML = `
+                    <div style="color: #dc3545;">
+                        <strong>❌ Ошибка подключения:</strong><br>
+                        Не удалось получить ответ от сервера. Проверьте подключение к интернету.
+                    </div>
+                `;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Анализировать данные';
+            }
+        });
+    </script>
+</body>
+
+</html>
