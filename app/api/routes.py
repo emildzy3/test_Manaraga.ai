@@ -38,9 +38,8 @@ async def index(request: Request) -> _TemplateResponse:
 async def analyze_flights(
     airport_code: str = Form(...), question: str = Form(...)
 ) -> dict[str, Any]:
-    """
-    Анализ данных о рейсах и ответ на вопрос пользователя
-    """
+    """Анализ данных о рейсах и ответ на вопрос пользователя"""
+
     airport_codes = [airport.code for airport in SUPPORTED_AIRPORTS]
     if airport_code not in airport_codes:
         raise HTTPException(
@@ -52,7 +51,6 @@ async def analyze_flights(
         answer = await llm_service.analyze_flight_data(
             question, flight_data, airport_code
         )
-
         return {
             "success": True,
             "answer": answer,

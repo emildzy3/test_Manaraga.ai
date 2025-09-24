@@ -65,4 +65,4 @@ SUPPORTED_AIRPORTS = [
 
 
 def get_settings() -> Settings:
-    return Settings() # pyright: ignore[reportCallIssue]
+    return Settings()  # pyright: ignore[reportCallIssue]
