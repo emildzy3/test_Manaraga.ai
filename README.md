@@ -1,5 +1,12 @@
 # Тестовое задаения для компании Manaraga.ai 
 
+## Запуск проекта для разработки: 
+1. Создать файл .env по подобию ".env.example"
+2. `docker-compose -f docker-compose-dev.yml up`
+
+## Деплой на продакшен (TODO)
+`docker-compose -f docker-compose.prod.yml up`
+
 ## Оригинальное ТЗ: 
 Project - Flights by Country
 We’re diving into the world of Google Flights again and want to create an exciting tool to explore the countries that flights arrive from for a specific airport. So an example: We look at London Heathrow airport, flights may arrive from France, Germany, UK itself, and other countries. Users should be able to select one of six airports and ask flight-related questions, with the app providing relevant answers.
