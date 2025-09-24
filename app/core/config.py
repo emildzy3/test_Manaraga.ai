@@ -61,12 +61,6 @@ SUPPORTED_AIRPORTS = [
         country="Netherlands",
         city="Amsterdam",
     ),
-    AirportInfo(
-        code="DOH",
-        name="Doha Hamad International",
-        country="Qatar",
-        city="Doha",
-    ),
 ]
 
 

@@ -40,7 +40,6 @@ async def analyze_flights(
     """
     Анализ данных о рейсах и ответ на вопрос пользователя
     """
-    # Проверяем корректность кода аэропорта
     airport_codes = [airport.code for airport in SUPPORTED_AIRPORTS]
     if airport_code not in airport_codes:
         raise HTTPException(
@@ -48,22 +47,7 @@ async def analyze_flights(
         )
 
     try:
-        # Получаем данные о рейсах
         flight_data = await flight_client.get_airport_arrivals(airport_code)
-
-        # Если нет данных от реального API, используем мок-данные
-        if not flight_data:
-            flight_data = await flight_client.get_mock_data(airport_code)
-
-        if not flight_data:
-            return {
-                "success": False,
-                "answer": (
-                    "Не удалось получить данные о рейсах для выбранного аэропорта."
-                ),
-            }
-
-        # Анализируем данные с помощью LLM
         answer = await llm_service.analyze_flight_data(
             question, flight_data, airport_code
         )
