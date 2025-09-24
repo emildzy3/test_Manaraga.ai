@@ -34,6 +34,13 @@
 docker-compose -f docker-compose.prod.yml up
 ```
 
+### TODO: 
+Необходимо доработать передачу информации из flightapi.io. Сейчас периодически возникает ошибка по количеству токенов. Возможные решения:  
+1. Вынести информацию в контекст беседы.  
+2. Увеличить количество токенов, которое может принимать модель.  
+3. Уменьшить объем информации от flightapi.io.  
+4. Отправлять данные в модель порционно.
+
 ## Оригинальное ТЗ: 
 Project - Flights by Country
 We’re diving into the world of Google Flights again and want to create an exciting tool to explore the countries that flights arrive from for a specific airport. So an example: We look at London Heathrow airport, flights may arrive from France, Germany, UK itself, and other countries. Users should be able to select one of six airports and ask flight-related questions, with the app providing relevant answers.
