@@ -54,7 +54,7 @@ class LLMService:
 
         try:
             response = await self.client.chat.completions.create(
-                model="sonar-pro",
+                model="sonar",
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": question},

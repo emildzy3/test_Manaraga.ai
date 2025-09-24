@@ -31,7 +31,7 @@ class FlightData(BaseModel):
 class FlightAPIClient:
     """Клиент для работы с FlightAPI.io"""
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, cache_ttl_minutes: int = 15):
         self.api_key = api_key
         self.base_url = "https://api.flightapi.io"
         self.client = httpx.AsyncClient(
@@ -40,6 +40,8 @@ class FlightAPIClient:
                 "Content-Type": "application/json",
             },
         )
+        self.cache_ttl = timedelta(minutes=cache_ttl_minutes)
+        self.cache: dict[str, dict] = {}
 
         # Создаем словарь поддерживаемых аэропортов для быстрого доступа
         self.supported_airports = {
@@ -51,13 +53,26 @@ class FlightAPIClient:
             for airport in config.SUPPORTED_AIRPORTS
         }
 
+    def _is_cache_valid(self, cache_entry: dict) -> bool:
+        """Проверка валидности кеша"""
+        cached_at = cache_entry.get("cached_at")
+        if not cached_at:
+            return False
+        return datetime.now() - cached_at < self.cache_ttl
+
     async def get_airport_arrivals(self, airport_code: str) -> dict[str, Any]:
         """
-        Получение данных о рейсах в аэропорт
+        Получение данных о рейсах в аэропорт с кешированием
         """
 
         if airport_code not in [airport.code for airport in config.SUPPORTED_AIRPORTS]:
             raise ValueError(f"Неподдерживаемый аэропорт: {airport_code}")
+
+        # Проверяем кеш
+        cache_key = f"arrivals_{airport_code}"
+        if cache_key in self.cache and self._is_cache_valid(self.cache[cache_key]):
+            return self.cache[cache_key]["data"]
+
         result_info = {"airport_info": "", "arrivals": [], "departures": []}
         for fly_mode in ["arrivals", "departures"]:
             try:
@@ -66,7 +81,11 @@ class FlightAPIClient:
                 response = await self.client.get(url, params=params)
                 if response.status_code == 200:
                     data = response.json()
-                    result_info[fly_mode] = data
+                    result_info[fly_mode] = data["airport"]["pluginData"]
             except httpx.HTTPError:
                 continue
+
+        # Сохраняем в кеш
+        self.cache[cache_key] = {"data": result_info, "cached_at": datetime.now()}
+
         return result_info
