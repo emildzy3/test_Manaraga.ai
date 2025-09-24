@@ -1,3 +1,4 @@
+from asyncio.log import logger
 from pathlib import Path
 from typing import Any
 from fastapi import APIRouter, Form, HTTPException, Request
@@ -18,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 templates = get_jinja2_templates(base_dir=BASE_DIR)
 
 flight_client = FlightAPIClient(settings.flight_api_key)
-llm_service = LLMService(settings.openai_api_key)
+llm_service = LLMService(settings.perplexity_api_key)
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -58,8 +59,8 @@ async def analyze_flights(
             "flights_count": len(flight_data),
             "airport_code": airport_code,
         }
-
     except Exception as e:
+        logger.error(e, exc_info=True)
         raise HTTPException(
             status_code=500, detail=f"Ошибка при анализе данных: {str(e)}"
         ) from e

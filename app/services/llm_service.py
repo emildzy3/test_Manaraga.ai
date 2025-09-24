@@ -1,5 +1,5 @@
 """
-Сервис для работы с LLM (OpenAI GPT)
+Сервис для работы с LLM (Perplexity AI)
 Анализ данных о рейсах и ответы на вопросы пользователей
 """
 
@@ -15,7 +15,10 @@ class LLMService:
     """Сервис для анализа данных о рейсах с помощью LLM"""
 
     def __init__(self, api_key: str):
-        self.client = AsyncOpenAI(api_key=api_key)
+        self.client = AsyncOpenAI(
+            api_key=api_key,
+            base_url="https://api.perplexity.ai"
+        )
 
     async def analyze_flight_data(
         self,
@@ -51,7 +54,7 @@ class LLMService:
 
         try:
             response = await self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="sonar-pro",
                 messages=[
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": question},

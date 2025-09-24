@@ -14,7 +14,7 @@ dependencies = [
     "pydantic>=2.5.0",
     "python-dotenv>=1.0.0",
     "pydantic-settings>=2.0.0",
-    "perplexity>=0.0.1",
+    "openai>=1.0.0",  # For Perplexity API compatibility
 ]
 
 [dependency-groups]

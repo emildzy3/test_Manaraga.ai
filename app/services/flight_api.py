@@ -64,10 +64,9 @@ class FlightAPIClient:
                 url = f"{self.base_url}/schedule/{self.api_key}"
                 params = {"mode": fly_mode, "day": 1, "iata": airport_code}
                 response = await self.client.get(url, params=params)
-
                 if response.status_code == 200:
                     data = response.json()
+                    result_info[fly_mode] = data
             except httpx.HTTPError:
                 continue
-            result_info[fly_mode] = data
         return result_info

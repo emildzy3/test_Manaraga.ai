@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # API ключи
     flight_api_key: str
-    openai_api_key: str
+    perplexity_api_key: str
 
     # Настройки сервера
     host: str
