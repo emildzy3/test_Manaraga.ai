@@ -2,7 +2,7 @@
 
 ## Запуск проекта для разработки: 
 1. Создать файл .env по подобию ".env.example"
-2. `docker-compose -f docker-compose-dev.yml up`
+2. `docker-compose -f docker-compose.dev.yml up`
 
 ## Деплой на продакшен (TODO)
 `docker-compose -f docker-compose.prod.yml up`
