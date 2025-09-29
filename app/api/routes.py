@@ -54,7 +54,6 @@ async def analyze_flights(
         return {
             "success": True,
             "answer": answer,
-            "flights_count": len(flight_data),
             "airport_code": airport_code,
         }
     except Exception as e:
